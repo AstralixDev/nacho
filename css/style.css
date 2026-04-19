@@ -1,0 +1,140 @@
+:root {
+    --dark-bg: #080a0c;
+    --green-accent: #10b981;
+}
+
+body.dark-theme {
+    background-color: var(--dark-bg);
+    scroll-behavior: smooth;
+}
+
+/* Glassmorphism Topbar */
+.header-glass {
+    background: rgba(8, 10, 12, 0.7);
+    backdrop-filter: blur(12px); /* El efecto blur */
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+/* Animación Menú Móvil */
+.mobile-menu-container {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100vh;
+    background: var(--dark-bg);
+    z-index: -1;
+    transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-menu-container.active {
+    left: 0; /* Entra a la pantalla */
+}
+
+.text-stroke-green {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--green-accent);
+}
+
+.nav-link {
+    color: #64748b;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--green-accent);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+/* Efecto de borde brillante suave para las cards */
+.group:hover {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* Ocultar flecha de <details> en algunos navegadores */
+summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Inputs minimalistas */
+input::placeholder {
+    color: #4b5563;
+}
+
+/* Efecto Hover en Testimonios */
+.bg-gray-900\/40 {
+    transition: background-color 0.4s, border-color 0.4s;
+}
+
+.bg-gray-900\/40:hover {
+    background-color: rgba(17, 24, 39, 0.8);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Footer Links Hover */
+footer a {
+    position: relative;
+    display: inline-block;
+}
+
+footer a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--green-accent);
+    transition: width 0.3s ease;
+}
+
+footer a:hover::after {
+    width: 100%;
+}
+
+/* Efecto Pulse para el Status */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #6b7280;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+}
+
+.filter-btn.active-filter {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.time-filter-btn {
+    @apply px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-tighter text-gray-500 transition-all;
+}
+.time-filter-btn.active-filter {
+    @apply bg-green-500/10 text-green-500;
+}

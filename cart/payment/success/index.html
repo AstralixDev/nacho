@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombre - Success</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .animate-check {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 2s ease-in-out forwards;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+        .bg-glow {
+            background: radial-gradient(circle at center, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body class="bg-[#080a0c] text-gray-200 min-h-screen flex items-center justify-center p-6 font-sans overflow-hidden">
+
+    <div class="fixed inset-0 bg-glow pointer-events-none"></div>
+
+    <main class="relative z-10 w-full max-w-lg">
+        <div class="bg-gray-900/20 border border-white/5 backdrop-blur-3xl rounded-[48px] p-12 text-center shadow-2xl">
+            
+            <div class="mb-10 flex justify-center">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-green-500/20 blur-3xl rounded-full"></div>
+                    <svg class="w-32 h-32 text-green-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path class="animate-check" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="space-y-4 mb-12">
+                <h1 class="text-4xl font-black text-white uppercase tracking-tighter italic">Pago Confirmado</h1>
+                <p class="text-gray-500 text-sm font-bold uppercase tracking-widest leading-relaxed">
+                    Tu transacción ha sido procesada con éxito.<br>
+                    Recibirás un comprobante en tu email en breve.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 mb-12">
+                <div class="bg-white/5 border border-white/5 rounded-3xl p-6 flex justify-between items-center">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest italic">ID de Orden</span>
+                    <span id="order-id" class="text-xs font-black text-white uppercase">#...</span>
+                </div>
+                <div class="bg-white/5 border border-white/5 rounded-3xl p-6 flex justify-between items-center">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest italic">Estado</span>
+                    <span class="text-green-500 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Verificado
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <a href="/account/dashboard/" class="bg-white text-black font-black py-6 px-10 rounded-[24px] hover:bg-green-500 transition-all uppercase text-[11px] tracking-[0.2em] shadow-xl shadow-white/5">
+                    Ir al Dashboard
+                </a>
+                <a href="/" class="text-gray-600 hover:text-white font-black py-4 uppercase text-[9px] tracking-[0.3em] transition-colors">
+                    Volver al Inicio
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center mt-12 text-gray-700 text-[9px] font-black uppercase tracking-[0.4em]">
+            Gracias por confiar en nosotros
+        </p>
+    </main>
+
+    <script type="module">
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId') || 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        document.getElementById('order-id').innerText = orderId;
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombre - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="dark-theme text-gray-200 min-h-screen flex flex-col">
+
+    <header class="header-glass sticky top-0 z-[100]">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-black text-green-500 tracking-tighter hover:opacity-80 transition-opacity uppercase">Nombre</a>
+            <a href="/" class="text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-green-500 transition-colors">← Volver al inicio</a>
+        </nav>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-6 py-12">
+        <div class="w-full max-w-md animate-fade-in">
+            
+            <div class="bg-gray-900/40 backdrop-blur-xl border border-white/5 rounded-3xl p-8 md:p-10 shadow-2xl">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-white mb-2">Bienvenido</h2>
+                    <p class="text-gray-500 text-sm">Ingresa tus credenciales para continuar</p>
+                </div>
+
+                <button id="google-login" class="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold py-3 rounded-2xl transition-all flex items-center justify-center gap-3 mb-6">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5" alt="Google">
+                    <span class="text-sm uppercase tracking-widest">Continuar con Google</span>
+                </button>
+
+                <div class="relative my-8">
+                    <div class="absolute inset-0 flex items-center"><span class="w-full border-t border-white/5"></span></div>
+                    <div class="relative flex justify-center text-[10px] uppercase tracking-[0.2em]"><span class="bg-[#0b0f14] px-4 text-gray-600">O usa tu cuenta</span></div>
+                </div>
+
+                <form id="login-form" class="space-y-6">
+                    <div class="space-y-2">
+                        <label for="email" class="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Email o Usuario</label>
+                        <input type="text" id="email" required class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500/20 transition-all placeholder:text-gray-700" placeholder="tu@email.com o usuario">
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center ml-1">
+                            <label for="password" class="text-xs font-bold uppercase tracking-widest text-gray-400">Contraseña</label>
+                            <a href="/auth/recovery/" class="text-[10px] uppercase font-bold text-green-600 hover:text-green-400 transition-colors">¿La olvidaste?</a>
+                        </div>
+                        <div class="relative">
+                            <input type="password" id="password" required class="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500/20 transition-all placeholder:text-gray-700" placeholder="••••••••">
+                            <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors">
+                                <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-lg shadow-green-900/20 mt-4">
+                        Iniciar Sesión
+                    </button>
+                </form>
+
+                <p class="text-center text-sm text-gray-500 mt-8">
+                    ¿No tienes una cuenta? <a href="/auth/register/" class="text-green-500 font-bold hover:underline underline-offset-4">Crea una ahora</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <div id="status-modal" class="fixed inset-0 z-[200] flex items-center justify-center px-6 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+        <div class="relative bg-gray-900 border border-white/10 w-full max-w-sm rounded-3xl p-8 shadow-2xl overflow-hidden">
+            <div class="text-center">
+                <div id="modal-icon" class="mb-4 flex justify-center"></div>
+                <h3 id="modal-title" class="text-xl font-bold text-white mb-2"></h3>
+                <p id="modal-desc" class="text-gray-500 text-sm mb-6"></p>
+                <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div id="modal-progress" class="h-full bg-green-500 w-full"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-black/60 border-t border-white/5 pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between gap-12 mb-12">
+                
+                <div class="max-w-md">
+                    <h2 class="text-2xl font-black text-green-500 tracking-tighter mb-4 uppercase">NOMBRE</h2>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
+                        Elevando el estándar de calidad en cada producto. Diseño, innovación y compromiso en un solo lugar para ofrecerte lo mejor del mercado.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 hover:text-green-500 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.058-1.69-.072-4.949-.072zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex gap-16">
+                    <div>
+                        <h4 class="text-white font-bold mb-6 text-xs uppercase tracking-[0.2em]">Explorar</h4>
+                        <ul class="space-y-4 text-sm">
+                            <li><a href="/" class="text-gray-500 hover:text-green-500 transition-colors">Inicio</a></li>
+                            <li><a href="/catalog/" class="text-gray-500 hover:text-green-500 transition-colors">Catálogo</a></li>
+                            <li><a href="/prices/" class="text-gray-500 hover:text-green-500 transition-colors">Precios</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-white font-bold mb-6 text-xs uppercase tracking-[0.2em]">Ayuda</h4>
+                        <ul class="space-y-4 text-sm">
+                            <li><a href="/help/support" class="text-gray-500 hover:text-green-500 transition-colors">Soporte</a></li>
+                            <li><a href="/help/faqs" class="text-gray-500 hover:text-green-500 transition-colors">FAQ</a></li>
+                            <li><a href="/help/legal" class="text-gray-500 hover:text-green-500 transition-colors">Legal</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-600 text-[10px] uppercase tracking-widest">
+                    © 2026 NOMBRE. All rights reserved.
+                </p>
+                <div class="flex items-center space-x-2 bg-green-900/10 px-3 py-1 rounded-full border border-green-500/10">
+                    <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                    <span class="text-green-500/80 text-[9px] font-bold uppercase tracking-tighter">Status: Active</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { loginUser, loginWithGoogle } from "/js/manage.js";
+
+        // Lógica Toggle Password
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('toggle-password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            
+            // Cambio de icono (opcional: podrías cambiar el path del SVG aquí)
+            eyeIcon.style.color = isPassword ? '#22c55e' : '#6b7280'; 
+        });
+
+        // --- Lógica de Modales y Login ---
+        const modal = document.getElementById('status-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalIcon = document.getElementById('modal-icon');
+        const progress = document.getElementById('modal-progress');
+
+        const showModal = (type, title, message, callback) => {
+            const isSuccess = type === 'success';
+            modalTitle.innerText = title;
+            modalDesc.innerText = message;
+            
+            modalIcon.innerHTML = isSuccess 
+                ? `<div class="p-3 bg-green-500/10 rounded-full text-green-500"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>`
+                : `<div class="p-3 bg-red-500/10 rounded-full text-red-500"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div>`;
+            
+            progress.className = isSuccess ? "h-full bg-green-500 w-full transition-all duration-[2000ms] ease-linear" : "h-full bg-red-500 w-full transition-all duration-[2000ms] ease-linear";
+            
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => { progress.style.width = '0%'; }, 50);
+
+            setTimeout(() => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                if (callback) callback();
+            }, 2050);
+        };
+
+        const loginForm = document.getElementById('login-form');
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const res = await loginUser(email, password);
+            if (res.success) {
+                showModal('success', '¡Éxito!', 'Cargando tu perfil...', () => {
+                    window.location.href = "/";
+                });
+            } else {
+                showModal('error', 'Error de acceso', 'Verifica tus datos e intenta de nuevo.');
+            }
+        });
+
+        document.getElementById('google-login').addEventListener('click', async () => {
+            const res = await loginWithGoogle();
+            if (res.success) {
+                showModal('success', '¡Bienvenido!', 'Sesión iniciada con Google.', () => {
+                    window.location.href = "/";
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOMBRE - Legal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #030303; 
+            color: #a1a1aa;
+        }
+
+        .font-titles { font-family: 'Archivo Black', sans-serif; }
+
+        /* Scroll Progress Bar */
+        #progress-bar {
+            height: 3px;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            position: fixed;
+            top: 0; left: 0; width: 0%;
+            z-index: 200;
+            transition: width 0.1s ease;
+        }
+
+        /* Glassmorphism Refinado */
+        .glass-sidebar {
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-active {
+            color: #fff;
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, transparent 100%);
+            border-left: 4px solid #22c55e;
+        }
+
+        /* Animación de entrada de contenido */
+        .content-entry {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #030303; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
+    </style>
+</head>
+<body class="selection:bg-green-500 selection:text-black">
+
+    <div id="progress-bar"></div>
+
+    <header class="h-20 flex items-center px-10 border-b border-white/5 sticky top-0 bg-[#030303]/80 backdrop-blur-xl z-[100]">
+        <div class="w-full flex justify-between items-center">
+            <div class="flex items-center gap-8">
+                <a href="/help/" class="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-all">
+                    <div class="p-2 bg-white/5 rounded-full group-hover:bg-green-500 group-hover:text-black transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
+                    </div>
+                    <span>TIENDA</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="font-titles text-xl text-white italic tracking-tighter uppercase">NOMBRE</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex flex-col md:flex-row min-h-screen">
+        
+        <aside class="w-full md:w-96 border-r border-white/5 glass-sidebar p-10 flex flex-col">
+            <div class="mb-10">
+                <h2 class="text-[10px] font-black text-white uppercase tracking-[0.5em] mb-8">Centro de Ayuda</h2>
+                <nav class="space-y-2">
+                    <button onclick="switchTab('terms')" id="tab-terms" class="w-full text-left px-6 py-5 text-[11px] font-black uppercase tracking-widest transition-all rounded-r-xl nav-active">01. Términos de Servicio</button>
+                    <button onclick="switchTab('privacy')" id="tab-privacy" class="w-full text-left px-6 py-5 text-[11px] font-black uppercase tracking-widest transition-all rounded-r-xl text-gray-500 hover:text-white">02. Política de Privacidad</button>
+                    <button onclick="switchTab('refunds')" id="tab-refunds" class="w-full text-left px-6 py-5 text-[11px] font-black uppercase tracking-widest transition-all rounded-r-xl text-gray-500 hover:text-white">03. Devoluciones</button>
+                    <button onclick="switchTab('security')" id="tab-security" class="w-full text-left px-6 py-5 text-[11px] font-black uppercase tracking-widest transition-all rounded-r-xl text-gray-500 hover:text-white">04. Seguridad Digital</button>
+                </nav>
+            </div>
+
+            <div class="mt-auto">
+                <div class="p-8 rounded-[32px] bg-white/5 border border-white/10 relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-green-500/10 blur-3xl group-hover:bg-green-500/20 transition-all"></div>
+                    <p class="text-[10px] text-white font-black uppercase tracking-widest mb-3">Soporte Legal</p>
+                    <p class="text-[11px] text-gray-500 leading-relaxed mb-6 font-medium">¿Preguntas específicas? Nuestro equipo legal responde en un plazo de 48 horas.</p>
+                    <a href="mailto:legal@nombre.com" class="text-[10px] font-black text-green-500 uppercase tracking-widest border-b border-green-500/30 pb-1 hover:border-green-500 transition-all">Enviar Ticket</a>
+                </div>
+            </div>
+        </aside>
+
+        <section class="flex-grow p-10 md:p-24 overflow-y-auto" id="main-scroll-area">
+            <div id="legal-container" class="max-w-4xl content-entry">
+                </div>
+        </section>
+
+    </main>
+
+    <script>
+        const content = {
+            terms: {
+                badge: "Versión 2026.1",
+                title: "Términos de <br><span class='text-green-500'>Uso Global</span>",
+                text: `
+                    <div class="space-y-16 mt-20">
+                        <section>
+                            <span class="text-green-500 font-titles text-2xl">01/</span>
+                            <h3 class="text-white font-black uppercase italic tracking-tighter text-3xl mt-2 mb-6">Acuerdo de Licencia</h3>
+                            <p class="text-gray-400 font-medium text-lg leading-relaxed">Al utilizar los servicios de <span class="text-white">NOMBRE</span>, usted adquiere una licencia limitada, no transferible y revocable. No vendemos software; vendemos el derecho de uso bajo estándares de calidad específicos.</p>
+                        </section>
+                        <section>
+                            <span class="text-green-500 font-titles text-2xl">02/</span>
+                            <h3 class="text-white font-black uppercase italic tracking-tighter text-3xl mt-2 mb-6">Conducta del Usuario</h3>
+                            <p class="text-gray-400 font-medium text-lg leading-relaxed">Cualquier intento de explotación, inyección de código malicioso o uso de nuestros bots/plataformas para actividades ilícitas resultará en la terminación inmediata del servicio sin derecho a réplica.</p>
+                        </section>
+                        <section>
+                            <span class="text-green-500 font-titles text-2xl">03/</span>
+                            <h3 class="text-white font-black uppercase italic tracking-tighter text-3xl mt-2 mb-6">Jurisdicción</h3>
+                            <p class="text-gray-400 font-medium text-lg leading-relaxed">Este contrato se rige bajo las leyes vigentes de comercio digital internacional y protección de software como servicio (SaaS).</p>
+                        </div>
+                    </div>
+                `
+            },
+            privacy: {
+                badge: "Privacidad Nivel 4",
+                title: "Tratamiento de <br><span class='text-green-500'>Privacidad</span>",
+                text: `
+                    <div class="space-y-16 mt-20">
+                        <section>
+                            <span class="text-green-500 font-titles text-2xl">01/</span>
+                            <h3 class="text-white font-black uppercase italic tracking-tighter text-3xl mt-2 mb-6">Cero Log Policy</h3>
+                            <p class="text-gray-400 font-medium text-lg leading-relaxed">En <span class="text-white">NOMBRE</span> no almacenamos registros de actividad personal. Solo conservamos metadatos necesarios para la estabilidad de la conexión y prevención de ataques DDoS.</p>
+                        </section>
+                    </div>
+                `
+            },
+            refunds: {
+                badge: "Actualizado",
+                title: "Reembolsos y <br><span class='text-green-500'>Garantía</span>",
+                text: `
+                    <div class="space-y-16 mt-20">
+                        <section>
+                            <span class="text-green-500 font-titles text-2xl">01/</span>
+                            <h3 class="text-white font-black uppercase italic tracking-tighter text-3xl mt-2 mb-6">Bienes Digitales</h3>
+                            <p class="text-gray-400 font-medium text-lg leading-relaxed">Los productos entregados mediante descarga directa o activación de licencia inmediata no son sujetos a reembolso. No obstante, ofrecemos un periodo de garantía de 48 horas para reportar fallos de arquitectura.</p>
+                        </section>
+                    </div>
+                `
+            },
+            security: {
+                badge: "Encriptación AES-256",
+                title: "Estándar de <br><span class='text-green-500'>Seguridad</span>",
+                text: `
+                    <div class="space-y-16 mt-20">
+                        <section>
+                            <span class="text-green-500 font-titles text-2xl">01/</span>
+                            <h3 class="text-white font-black uppercase italic tracking-tighter text-3xl mt-2 mb-6">Blindaje de Infraestructura</h3>
+                            <p class="text-gray-400 font-medium text-lg leading-relaxed">Utilizamos capas de seguridad propietarias para proteger el código de nuestros clientes. Cada despliegue es auditado individualmente antes de la entrega final.</p>
+                        </section>
+                    </div>
+                `
+            }
+        };
+
+        function switchTab(tabId) {
+            const container = document.getElementById('legal-container');
+            const data = content[tabId];
+
+            container.classList.remove('content-entry');
+            void container.offsetWidth; // Trigger reflow
+            container.classList.add('content-entry');
+
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('nav-active', 'text-white');
+                btn.classList.add('text-gray-500');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.add('nav-active', 'text-white');
+
+            container.innerHTML = `
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="text-[9px] font-black bg-white/5 border border-white/10 px-4 py-2 rounded-lg uppercase tracking-[0.3em] text-green-500">${data.badge}</span>
+                    <span class="h-px flex-grow bg-white/5"></span>
+                </div>
+                <h1 class="font-titles text-7xl md:text-9xl text-white uppercase italic tracking-tighter leading-[0.85]">${data.title}</h1>
+                ${data.text}
+            `;
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Progress Bar Logic
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        });
+
+        switchTab('terms');
+    </script>
+</body>
+</html>

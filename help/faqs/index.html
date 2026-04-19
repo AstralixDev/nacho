@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOMBRE - FaQs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #030303; 
+            color: #a1a1aa;
+        }
+
+        .font-titles { font-family: 'Archivo Black', sans-serif; }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding-top: 1.5rem;
+        }
+
+        .faq-item.active {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .faq-icon { transition: transform 0.4s ease; }
+        .faq-item.active .faq-icon { transform: rotate(45deg); color: #22c55e; }
+
+        .content-entry {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+    </style>
+</head>
+<body class="selection:bg-green-500 selection:text-black">
+
+    <header class="h-20 flex items-center px-10 border-b border-white/5 sticky top-0 bg-[#030303]/80 backdrop-blur-xl z-[100]">
+        <div class="w-full flex justify-between items-center">
+            <div class="flex items-center gap-8">
+                <a href="/help/" class="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-all">
+                    <div class="p-2 bg-white/5 rounded-full group-hover:bg-green-500 group-hover:text-black transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
+                    </div>
+                    <span>Tienda</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="font-titles text-xl text-white italic tracking-tighter uppercase">NOMBRE</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-20">
+        
+        <div class="mb-24 content-entry">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-[9px] font-black bg-white/5 border border-white/10 px-4 py-2 rounded-lg uppercase tracking-[0.3em] text-green-500">Centro de Ayuda</span>
+                <span class="h-px flex-grow bg-white/5"></span>
+            </div>
+            <h1 class="font-titles text-7xl md:text-9xl text-white uppercase italic tracking-tighter leading-[0.85] mb-8">Compras & <br><span class="text-green-500">Envíos</span></h1>
+            <p class="max-w-xl text-lg text-gray-500 font-medium italic">Todo lo que necesitas saber sobre tus pedidos, seguimiento y procesos de entrega en NOMBRE.</p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 content-entry">
+            
+            <div class="faq-item rounded-[32px] p-8 cursor-pointer" onclick="toggleFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-white font-black uppercase italic tracking-tighter text-xl md:text-2xl">01. ¿Cuáles son los plazos de entrega?</h3>
+                    <div class="faq-icon text-gray-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p class="text-gray-400 font-medium leading-relaxed">
+                        Procesamos todos los pedidos en un máximo de 24 horas hábiles. El tiempo de tránsito estándar es de <span class="text-white">2 a 5 días hábiles</span>, dependiendo de su ubicación. Recibirá un número de seguimiento en su correo apenas el paquete salga de nuestro centro de distribución.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item rounded-[32px] p-8 cursor-pointer" onclick="toggleFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-white font-black uppercase italic tracking-tighter text-xl md:text-2xl">02. ¿Es seguro comprar en este sitio?</h3>
+                    <div class="faq-icon text-gray-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p class="text-gray-400 font-medium leading-relaxed">
+                        Absolutamente. Utilizamos pasarelas de pago cifradas con tecnología <span class="text-white">SSL de 256 bits</span> y cumplimiento PCI-DSS. No almacenamos los datos de su tarjeta; toda la transacción se procesa de forma externa y segura.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item rounded-[32px] p-8 cursor-pointer" onclick="toggleFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-white font-black uppercase italic tracking-tighter text-xl md:text-2xl">03. ¿Qué garantía tienen los productos?</h3>
+                    <div class="faq-icon text-gray-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p class="text-gray-400 font-medium leading-relaxed">
+                        Todos nuestros artículos cuentan con una <span class="text-white">garantía de satisfacción de 30 días</span> por defectos de fabricación. Si su producto llega dañado o no funciona correctamente, gestionamos el cambio sin costo adicional para usted.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item rounded-[32px] p-8 cursor-pointer" onclick="toggleFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-white font-black uppercase italic tracking-tighter text-xl md:text-2xl">04. ¿Puedo cancelar un pedido ya realizado?</h3>
+                    <div class="faq-icon text-gray-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p class="text-gray-400 font-medium leading-relaxed">
+                        Puede cancelar su pedido siempre y cuando no haya sido despachado. Una vez que el estado cambia a "Enviado", deberá esperar a recibirlo para iniciar un proceso de devolución estándar según nuestras políticas.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-32 p-16 rounded-[48px] bg-white/5 border border-white/10 text-center content-entry">
+            <h2 class="font-titles text-4xl text-white uppercase italic mb-4">¿Tu pedido tiene un problema?</h2>
+            <p class="text-gray-500 mb-12 font-bold uppercase tracking-widest text-xs">Atención al cliente disponible de Lunes a Viernes</p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="/tracking" class="bg-white text-black font-black py-6 px-12 rounded-2xl hover:bg-green-500 transition-all uppercase text-xs tracking-widest">Rastrear mi Pedido</a>
+                <a href="https://wa.me/tusoporte" class="bg-transparent text-white font-black py-6 px-12 rounded-2xl border border-white/10 hover:bg-white/5 transition-all uppercase text-xs tracking-widest flex items-center justify-center gap-3">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.67-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .015 5.398.015 12.03c0 2.123.553 4.197 1.604 6.013L0 24l6.135-1.61a11.77 11.77 0 005.911 1.6c6.635 0 12.032-5.397 12.032-12.03a11.75 11.75 0 00-3.482-8.484z"/></svg>
+                    WhatsApp Business
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleFaq(element) {
+            element.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

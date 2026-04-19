@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .time-filter-btn { @apply px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all; }
+        .active-filter { @apply bg-green-500 text-black shadow-lg shadow-green-500/20; }
+        .nav-link-active { @apply bg-green-500/10 text-green-500 border-green-500/20 shadow-lg shadow-green-900/10; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-[#080a0c] text-gray-200 min-h-screen flex font-sans">
+
+    <aside class="w-64 border-r border-white/5 bg-black/20 backdrop-blur-xl hidden md:flex flex-col sticky top-0 h-screen">
+        <div class="p-8">
+            <a href="/" class="text-2xl font-black text-green-500 tracking-tighter uppercase italic">Nombre</a>
+        </div>
+        
+        <nav class="flex-grow px-4 space-y-2">
+            <button onclick="showView('panel')" id="nav-panel" class="nav-link w-full flex items-center space-x-3 p-4 rounded-2xl border border-transparent transition-all nav-link-active">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <span class="font-bold text-sm uppercase tracking-widest">General</span>
+            </button>
+            <button onclick="showView('cuenta')" id="nav-cuenta" class="nav-link w-full flex items-center space-x-3 text-gray-500 hover:text-white hover:bg-white/5 p-4 rounded-2xl transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                <span class="font-bold text-sm uppercase tracking-widest">Cuenta</span>
+            </button>
+            <div id="admin-nav" class="hidden border-t border-white/5 pt-4 mt-4 space-y-2">
+                <p class="px-4 text-[9px] font-black text-gray-600 uppercase tracking-[0.2em] mb-2">Administración</p>
+                <button onclick="showView('stats')" id="nav-stats" class="nav-link w-full flex items-center space-x-3 text-gray-500 hover:text-white hover:bg-white/5 p-4 rounded-2xl transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    <span class="font-bold text-sm uppercase tracking-widest">Stats</span>
+                </button>
+                <button onclick="showView('ventas')" id="nav-ventas" class="nav-link w-full flex items-center space-x-3 text-gray-500 hover:text-white hover:bg-white/5 p-4 rounded-2xl transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 118 0m-4 5v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5a2 2 0 012-2h12a2 2 0 012 2z"></path></svg>
+                    <span class="font-bold text-sm uppercase tracking-widest">Ventas</span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="p-6 border-t border-white/5 space-y-2">
+            <button id="logout-btn" class="flex items-center space-x-3 text-red-500/60 hover:text-red-500 transition-colors w-full p-4">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span class="font-bold text-xs uppercase tracking-widest">Salir</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-grow h-screen overflow-y-auto bg-gradient-to-b from-[#0b0f14] to-[#080a0c]">
+        <header class="p-8 flex justify-between items-center sticky top-0 bg-[#0b0f14]/80 backdrop-blur-md z-50 border-b border-white/5">
+            <div class="flex items-center gap-6">
+                <button id="back-button" onclick="showView('panel')" class="hidden p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all text-gray-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                </button>
+                <div>
+                    <h1 id="view-title" class="text-2xl font-black text-white uppercase tracking-tighter italic leading-none">Panel General</h1>
+                    <p class="text-gray-500 text-[9px] uppercase tracking-[0.2em] font-black mt-2">Status: <span id="display-name" class="text-green-500">CONECTADO</span></p>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-8 max-w-6xl mx-auto pb-24">
+            
+            <div id="view-panel" class="view-content space-y-6 animate-fade-in">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-900/20 border border-white/5 p-10 rounded-[40px] backdrop-blur-xl hover:border-green-500/20 transition-all group">
+                        <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 italic">Estado de Cuenta</p>
+                        <h3 class="text-4xl font-black text-white group-hover:text-green-500 transition-colors tracking-tighter">Activa</h3>
+                        <p class="text-green-500/60 text-[10px] font-bold mt-4 uppercase tracking-widest">● Verificado por WhatsApp</p>
+                    </div>
+                    <div class="bg-gray-900/20 border border-white/5 p-10 rounded-[40px] backdrop-blur-xl">
+                        <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 italic">Sincronización</p>
+                        <h3 class="text-4xl font-black text-white italic tracking-tighter">Cloud</h3>
+                        <p class="text-gray-600 text-[10px] font-bold mt-4 uppercase tracking-widest text-white/20">Base de datos en tiempo real</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-cuenta" class="view-content hidden animate-fade-in">
+                <div class="bg-gray-900/20 border border-white/5 rounded-[40px] p-10 backdrop-blur-xl">
+                    <h3 class="text-xl font-black text-white uppercase tracking-tighter italic mb-10">Perfil</h3>
+                    <form id="update-profile-form" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-2 italic">Nombre Público</label>
+                                <input type="text" id="input-name" class="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-5 text-sm text-white focus:outline-none focus:border-green-500 transition-all font-bold">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-2 italic">Email</label>
+                                <input type="email" id="input-email" disabled class="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-5 text-sm text-gray-600 cursor-not-allowed font-bold">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-white text-black font-black py-5 px-10 rounded-2xl hover:bg-green-500 transition-all uppercase text-[11px] tracking-[0.2em]">Actualizar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="view-stats" class="view-content hidden space-y-8 animate-fade-in">
+                <div class="flex bg-black/40 p-1.5 rounded-2xl border border-white/5 w-fit">
+                    <button onclick="updateStatsTimeframe('week')" id="btn-week" class="time-filter-btn active-filter">7 Días</button>
+                    <button onclick="updateStatsTimeframe('month')" id="btn-month" class="time-filter-btn text-gray-500">30 Días</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-gray-900/40 to-black border border-white/5 p-10 rounded-[40px]">
+                        <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2 italic">Ingresos</p>
+                        <h3 id="stat-revenue" class="text-5xl font-black text-white tracking-tighter">$0</h3>
+                    </div>
+                    <div class="bg-gray-900/20 border border-white/5 p-10 rounded-[40px]">
+                        <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2 italic">Popular</p>
+                        <h3 id="stat-top-product" class="text-xl font-black text-green-500 uppercase tracking-tighter leading-tight italic">N/A</h3>
+                    </div>
+                    <div class="bg-gray-900/20 border border-white/5 p-10 rounded-[40px]">
+                        <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2 italic">Ventas</p>
+                        <h3 id="stat-total-orders" class="text-5xl font-black text-white tracking-tighter">0</h3>
+                    </div>
+                </div>
+                <div class="bg-gray-900/20 border border-white/5 p-10 rounded-[40px] backdrop-blur-xl">
+                    <div class="h-[350px] w-full"><canvas id="salesChart"></canvas></div>
+                </div>
+            </div>
+
+            <div id="view-ventas" class="view-content hidden space-y-6 animate-fade-in">
+                <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                    <button onclick="filterSales('TODOS')" class="filter-btn active-filter px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/5 whitespace-nowrap">Todos</button>
+                    <button onclick="filterSales('PENDIENTE')" class="filter-btn text-gray-500 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/5 whitespace-nowrap">Pendientes</button>
+                    <button onclick="filterSales('ENVIADO')" class="filter-btn text-gray-500 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/5 whitespace-nowrap">Enviados</button>
+                    <button onclick="filterSales('ENTREGADO')" class="filter-btn text-gray-500 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/5 whitespace-nowrap">Completados</button>
+                </div>
+                <div id="sales-container" class="grid grid-cols-1 gap-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="order-modal" class="fixed inset-0 z-[500] flex items-center justify-center px-4 hidden animate-fade-in">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="closeOrderModal()"></div>
+        <div class="relative bg-[#0b0f14] border border-white/10 w-full max-w-2xl rounded-[40px] overflow-hidden shadow-2xl">
+            <div class="p-10 border-b border-white/5 flex justify-between items-center">
+                <h2 class="text-2xl font-black text-white uppercase italic tracking-tighter">Detalle</h2>
+                <button onclick="closeOrderModal()" class="text-gray-500 hover:text-white">✕</button>
+            </div>
+            <div id="modal-content" class="p-10 max-h-[60vh] overflow-y-auto"></div>
+            <div class="p-8 bg-black/40 border-t border-white/5 flex gap-4">
+                <select id="update-status-select" class="flex-grow bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-xs font-black text-white outline-none uppercase">
+                    <option value="PENDIENTE" class="bg-black">PENDIENTE</option>
+                    <option value="ENVIADO" class="bg-black">ENVIADO</option>
+                    <option value="ENTREGADO" class="bg-black">ENTREGADO</option>
+                </select>
+                <button id="save-status-btn" class="bg-green-500 text-black font-black px-8 py-4 rounded-2xl text-[10px] uppercase tracking-widest">Actualizar</button>
+            </div>
+        </div>
+    </div>
+
+<script type="module" src="/js/auth.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        import { auth, db } from "/firebase/credentials.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, getDocs, query, orderBy, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        let allSales = [];
+        let salesChart = null;
+        let currentPeriod = 'week';
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('display-name').innerText = user.displayName?.toUpperCase() || "ADMIN";
+                try {
+                    const adminDoc = await getDoc(doc(db, "authed", user.uid));
+                    if (adminDoc.exists()) {
+                        document.getElementById('admin-nav').classList.remove('hidden');
+                        initDashboard();
+                    } else { window.location.href = "/"; }
+                } catch (e) { console.error(e); }
+            } else { window.location.href = "/auth/login/"; }
+        });
+
+        async function initDashboard() {
+            await loadSalesData();
+        }
+
+        async function loadSalesData() {
+            const q = query(collection(db, "ventas"), orderBy("fecha", "desc"));
+            const snap = await getDocs(q);
+            allSales = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderSales('TODOS');
+            if (!document.getElementById('view-stats').classList.contains('hidden')) updateStats();
+        }
+
+        window.showView = (viewId) => {
+            document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('nav-link-active', 'text-green-500'));
+            const navBtn = document.getElementById(`nav-${viewId}`);
+            if(navBtn) navBtn.classList.add('nav-link-active');
+
+            const backBtn = document.getElementById('back-button');
+            if (viewId === 'panel') backBtn.classList.add('hidden');
+            else backBtn.classList.remove('hidden');
+
+            const titles = { 'panel': 'Panel General', 'stats': 'Estadísticas Rápidas', 'ventas': 'Gestión de Ventas', 'cuenta': 'Mi Cuenta' };
+            document.getElementById('view-title').innerText = titles[viewId] || 'Dashboard';
+
+            if (viewId === 'stats') updateStats();
+            if (viewId === 'ventas') renderSales('TODOS');
+        };
+
+        window.filterSales = (status) => {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active-filter');
+                btn.classList.add('text-gray-500');
+                if (btn.innerText.toUpperCase() === status) {
+                    btn.classList.add('active-filter');
+                    btn.classList.remove('text-gray-500');
+                }
+            });
+            renderSales(status);
+        };
+
+        function renderSales(filter) {
+            const container = document.getElementById('sales-container');
+            if (!container) return;
+            const filtered = filter === 'TODOS' ? allSales : allSales.filter(s => s.status === filter);
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="p-20 text-center text-gray-700 font-black uppercase text-[10px] tracking-widest">Sin registros</div>`;
+                return;
+            }
+            container.innerHTML = filtered.map(sale => `
+                <div onclick="openOrderModal('${sale.id}')" class="bg-gray-900/20 border border-white/5 p-8 rounded-[32px] hover:border-green-500/40 transition-all cursor-pointer group flex justify-between items-center">
+                    <div class="flex items-center gap-6">
+                        <div class="w-3 h-3 rounded-full ${getStatusColor(sale.status)} shadow-[0_0_15px_currentcolor]"></div>
+                        <div>
+                            <p class="text-white font-black text-sm uppercase">${sale.envio.nombre}</p>
+                            <p class="text-gray-600 text-[9px] font-black uppercase tracking-widest mt-1">${sale.envio.comuna}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-white font-black text-lg italic">$${(sale.monto || 0).toLocaleString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.openOrderModal = (id) => {
+            const sale = allSales.find(s => s.id === id);
+            if (!sale) return;
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+                    <div>
+                        <p class="text-[10px] font-black text-gray-600 uppercase italic tracking-widest">Cliente</p>
+                        <h4 class="text-white font-black text-2xl tracking-tighter">${sale.envio.nombre}</h4>
+                        <p class="text-green-500 text-sm font-black mt-2">${sale.envio.telefono}</p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-3xl border border-white/5">
+                        <p class="text-gray-300 text-xs font-bold uppercase leading-relaxed">
+                            ${sale.envio.region}<br>${sale.envio.comuna}<br>${sale.envio.direccion}
+                        </p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    ${(sale.items || []).map(item => `
+                        <div class="flex items-center justify-between bg-black/40 p-5 rounded-2xl border border-white/5">
+                            <span class="text-xs text-white font-black uppercase italic">${item.nombre}</span>
+                            <span class="text-xs text-green-500 font-black">$${(item.precio || 0).toLocaleString()}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('update-status-select').value = sale.status;
+            document.getElementById('save-status-btn').onclick = () => updateStatus(id);
+            document.getElementById('order-modal').classList.remove('hidden');
+        };
+
+        async function updateStatus(id) {
+            const newStatus = document.getElementById('update-status-select').value;
+            await updateDoc(doc(db, "ventas", id), { status: newStatus });
+            window.closeOrderModal();
+            await loadSalesData();
+        }
+
+        window.closeOrderModal = () => document.getElementById('order-modal').classList.add('hidden');
+
+        window.updateStatsTimeframe = (period) => {
+            currentPeriod = period;
+            document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active-filter'));
+            document.getElementById(`btn-${period}`).classList.add('active-filter');
+            updateStats();
+        };
+
+        function updateStats() {
+            const limitDate = new Date();
+            if (currentPeriod === 'week') limitDate.setDate(limitDate.getDate() - 7);
+            else limitDate.setMonth(limitDate.getMonth() - 1);
+            const periodSales = allSales.filter(s => {
+                const d = s.fecha?.seconds ? new Date(s.fecha.seconds * 1000) : new Date();
+                return d >= limitDate;
+            });
+            let totalRevenue = 0, productCounts = {}, chartMap = {};
+            periodSales.forEach(s => {
+                totalRevenue += (s.monto || 0);
+                (s.items || []).forEach(i => productCounts[i.nombre] = (productCounts[i.nombre] || 0) + 1);
+                const dayKey = s.fecha?.seconds ? new Date(s.fecha.seconds * 1000).toLocaleDateString('es-CL', {day:'2-digit', month:'short'}) : 'Hoy';
+                chartMap[dayKey] = (chartMap[dayKey] || 0) + s.monto;
+            });
+            document.getElementById('stat-revenue').innerText = `$${totalRevenue.toLocaleString()}`;
+            document.getElementById('stat-total-orders').innerText = periodSales.length;
+            const top = Object.entries(productCounts).sort((a,b) => b[1] - a[1])[0];
+            document.getElementById('stat-top-product').innerText = top ? top[0].toUpperCase() : "N/A";
+            drawChart(chartMap);
+        }
+
+        function drawChart(dataMap) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const labels = Object.keys(dataMap).reverse();
+            const values = Object.values(dataMap).reverse();
+            if (salesChart) salesChart.destroy();
+            salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        borderColor: '#22c55e',
+                        borderWidth: 4,
+                        backgroundColor: 'rgba(34, 197, 94, 0.05)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#4b5563', font: { size: 10 } } },
+                        x: { grid: { display: false }, ticks: { color: '#4b5563', font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        function getStatusColor(status) {
+            return { 'PENDIENTE': 'bg-yellow-500', 'ENVIADO': 'bg-blue-500', 'ENTREGADO': 'bg-green-500' }[status] || 'bg-gray-500';
+        }
+
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
+    </script>
+</body>
+</html>
